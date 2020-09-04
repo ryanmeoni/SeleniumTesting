@@ -32,5 +32,28 @@ def testExistingUser():
         print("username was valid, should not occur.")
 
 
+def testNotMatchingPasswords():
+    global driver
+    driver.get("https://ryanmeoni.pythonanywhere.com/register")
+
+    usernameInput = driver.find_element_by_id("id_username")
+    emailInput = driver.find_element_by_id("id_email")
+    passwordInput = driver.find_element_by_id("id_password1")
+    passwordConfirmInput = driver.find_element_by_id("id_password2")
+
+    usernameInput.send_keys("doesNotMatter")
+    emailInput.send_keys("test@gmail.com")
+    passwordInput.send_keys("notMatchingPasswords!")
+    passwordConfirmInput.send_keys("notMatchingPasswords!!!!!!!")
+
+    passwordConfirmInput.send_keys(Keys.RETURN)
+    time.sleep(1)
+    try:
+        checkResult = driver.find_element_by_id("error_1_id_password2")
+
+    except NoSuchElementException:
+        print("passwords matched, should not occur in this test.")
+
 if __name__ == "__main__":
     testExistingUser()
+    testNotMatchingPasswords()
