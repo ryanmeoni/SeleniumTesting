@@ -3,15 +3,45 @@ import time
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 PATH = "/home/ryan/Desktop/chromedriver"
 driver = webdriver.Chrome(PATH)
 
 
-def testExistingUser():
+# TESTS FOR LOGIN PAGE
+
+def testLoginSuccess():
+    global driver
+    driver.get("https://ryanmeoni.pythonanywhere.com/login/")
+
+    usernameInput = driver.find_element_by_id("id_username")
+    passwordInput = driver.find_element_by_id("id_password")
+
+    usernameInput.send_keys("test")
+    passwordInput.send_keys("thisisatest")
+    passwordInput.send_keys(Keys.RETURN)
+
+    # Wait 10 seconds max for login to occur
+    try:
+        loginSuccessElement = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.LINK_TEXT, "Your Profile"))
+        )
+    except Exception as E:
+        print("Unexpected exception in testLoginSuccess, exception is" + str(E))
+        return -1
+
+
+# TESTS FOR REGISTER PAGE
+def testRegisterExistingUsername():
     global driver
     driver.get("https://ryanmeoni.pythonanywhere.com/register")
 
+    time.sleep(2)
+
+    # Find fields needed to be populated to register
     usernameInput = driver.find_element_by_id("id_username")
     emailInput = driver.find_element_by_id("id_email")
     passwordInput = driver.find_element_by_id("id_password1")
@@ -30,12 +60,14 @@ def testExistingUser():
 
     except NoSuchElementException:
         print("username was valid, should not occur.")
+        return -1
 
 
-def testNotMatchingPasswords():
+def testRegisterNotMatchingPasswords():
     global driver
     driver.get("https://ryanmeoni.pythonanywhere.com/register")
 
+    # Find fields needed to be populated to register
     usernameInput = driver.find_element_by_id("id_username")
     emailInput = driver.find_element_by_id("id_email")
     passwordInput = driver.find_element_by_id("id_password1")
@@ -53,7 +85,10 @@ def testNotMatchingPasswords():
 
     except NoSuchElementException:
         print("passwords matched, should not occur in this test.")
+        return -1
+
 
 if __name__ == "__main__":
-    testExistingUser()
-    testNotMatchingPasswords()
+    testRegisterExistingUsername()
+    testRegisterNotMatchingPasswords()
+    testLoginSuccess()
