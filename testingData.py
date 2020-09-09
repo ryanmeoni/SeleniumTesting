@@ -26,11 +26,17 @@ class LoginPageTestingData(object):
 
 class ProfilePageTestingData(object):
 
-    ORIGINAL_USERNAME = "test"
-    NEW_TEST_USERNAME = "test-Changed-Username"
+    ORIGINAL_TEST_USERNAME = "test"
+    NEW_TEST_USERNAME = "test_Changed_Username"
+    CONFLICTING_USERNAME = "ryan"
 
-    ORIGINAL_EMAIL = "valid@yahoo.com"
-    NEW_TEST_EMAIL = "testingChangedEmail@yahoo.com"
+    ORIGINAL_TEST_EMAIL = "test@gmail.com"
+    NEW_TEST_EMAIL = "test_Changed_Email@gmail.com"
+    INVALID_EMAIL = "invalid_Email"
 
-    ORIGINAL_PASSWORD = "thisisatest"
+    ORIGINAL_TEST_PASSWORD = "thisisatest"
 
+class CreatePostTestingData(object):
+
+    TEST_POST_TITLE = "This is the test post title"
+    TEST_POST_CONTENT = "This is the test post content"

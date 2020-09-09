@@ -1,10 +1,13 @@
 from selenium.webdriver.common.by import By
 
+
 class HomePageLocators(object):
 
+    # All locators for homepage
     LOGIN_BUTTON = (By.LINK_TEXT, "Login")
     REGISTER_BUTTON = (By.LINK_TEXT, "Register")
     YOUR_PROFILE_BUTTON = (By.LINK_TEXT, "Your Profile")
+    CREATE_POST_BUTTON = (By.LINK_TEXT, "Create Post")
 
 
 class RegisterPageLocators(object):
@@ -44,3 +47,25 @@ class ProfilePageLocators(object):
 
     # Error message locators
     USERNAME_UPDATE_ERROR_MSG = (By.ID, "error_1_id_username")
+
+
+class CreatePostPageLocators(object):
+
+    # Post creation input locators
+    POST_TITLE = (By.ID, "id_title")
+    POST_CONTENT = (By.ID, "id_content")
+    CREATE_POST_BUTTON = (By.CSS_SELECTOR, ".btn-outline-info")
+
+
+class IndividualPostPageLocators(object):
+
+    # Post update and delete button locators
+    INDIVIDUAL_POST_UPDATE = (By.CSS_SELECTOR, ".btn-info")
+    INDIVIDUAL_POST_DELETE = (By.CSS_SELECTOR, ".btn-danger")
+
+
+class ConfirmDeletePostPageLocators(object):
+
+    # Cancel deletion and confirm deletetion button locators
+    CONFIRM_DELETE = (By.CSS_SELECTOR, ".btn-outline-danger")
+    CANCEL_DELETE = (By.CSS_SELECTOR, "btn-outline-info")
