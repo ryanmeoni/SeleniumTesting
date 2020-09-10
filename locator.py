@@ -8,6 +8,10 @@ class HomePageLocators(object):
     REGISTER_BUTTON = (By.LINK_TEXT, "Register")
     YOUR_PROFILE_BUTTON = (By.LINK_TEXT, "Your Profile")
     CREATE_POST_BUTTON = (By.LINK_TEXT, "Create Post")
+    MAIN_LOCATOR = (By.CSS_SELECTOR, "main")
+
+    # Test post locators
+    TEST_POST_LINK = (By.LINK_TEXT, "Hello!")
 
 
 class RegisterPageLocators(object):

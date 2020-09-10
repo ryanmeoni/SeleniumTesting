@@ -1,6 +1,8 @@
 class HomePageTestingData(object):
 
     HOMEPAGE_URL = "https://ryanmeoni.pythonanywhere.com/"
+    TEST_USER_OWNED_POST_TITLE = "Testing is essential for successful applications"
+    TEST_USER_NOT_OWNED_POST_TITLE = "Hello!"
 
 
 class RegisterPageTestingData(object):
