@@ -1,13 +1,19 @@
-from locator import (RegisterPageLocators, LoginPageLocators,
-                     HomePageLocators, ProfilePageLocators, CreatePostPageLocators,
-                     IndividualPostPageLocators, ConfirmDeletePostPageLocators)
+# Standard library imports
+import sys
+sys.path.append("..")
 
-from testingData import HomePageTestingData
-
+# Third party imports
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+
+# Local file imports
+from Resources.locator import (RegisterPageLocators, LoginPageLocators,
+                      HomePageLocators, ProfilePageLocators, CreatePostPageLocators,
+                      IndividualPostPageLocators, ConfirmDeletePostPageLocators)
+
+from TestingData.testingData import HomePageTestingData
 
 
 # Base class that all page classes inherit from
@@ -19,7 +25,7 @@ class BasePage(object):
     # Function for clicking an element (such as a button or anchor tag)
     def click_element(self, locator):
         try:
-            self.check_if_element_exists(locator)
+            self.wait_until_element_exists(locator)
             currElement = WebDriverWait(self.driver, 7).until(EC.visibility_of_element_located(locator))
             currElement.click()
             return 0
@@ -28,8 +34,8 @@ class BasePage(object):
             print("No such element in click() in page.py")
             return -1
 
-    # Function for checking if an element exists
-    def check_if_element_exists(self, locator):
+    # Function for checking if an element exists on a page
+    def wait_until_element_exists(self, locator):
         try:
             WebDriverWait(self.driver, 7).until(EC.visibility_of_element_located(locator))
             return 0
@@ -38,10 +44,19 @@ class BasePage(object):
             print("Timeout in check_element_exists() in page.py")
             return -1
 
+    # Function that checks if an element exists on a page
+    def check_if_element_exists(self, locator):
+        try:
+            self.driver.find_element(*locator)
+            return 0
+
+        except NoSuchElementException:
+            return -1
+
     # Function for inputting text into a text field
     def set_input_text(self, locator, text):
         try:
-            self.check_if_element_exists(locator)
+            self.wait_until_element_exists(locator)
             self.driver.find_element(*locator).clear()
             currElement = WebDriverWait(self.driver, 7).until(EC.visibility_of_element_located(locator))
             currElement.send_keys(text)
@@ -54,7 +69,7 @@ class BasePage(object):
     # Function for retrieving text from a text field
     def get_input_text(self, locator):
         try:
-            self.check_if_element_exists(locator)
+            self.wait_until_element_exists(locator)
             currElementText = self.driver.find_element(*locator).get_property("value")
             return currElementText
 
@@ -67,7 +82,7 @@ class BasePage(object):
     # Function that returns all HTML article elements on pages where a list of posts are shown
     def get_all_posts(self):
         try:
-            self.check_if_element_exists(HomePageLocators.MAIN_LOCATOR)
+            self.wait_until_element_exists(HomePageLocators.MAIN_LOCATOR)
             main = WebDriverWait(self.driver, 7).until(EC.presence_of_element_located(HomePageLocators.MAIN_LOCATOR))
             articles = main.find_elements_by_tag_name("article")
             return articles
@@ -82,7 +97,7 @@ class BasePage(object):
     def click_post_link_by_title(self, postTitle):
         try:
             postLocator = (By.LINK_TEXT, postTitle)
-            self.check_if_element_exists(postLocator)
+            self.wait_until_element_exists(postLocator)
             self.click_element(postLocator)
 
         except TimeoutException:
@@ -105,7 +120,7 @@ class HomePage(BasePage):
 
     # Function that checks for the presence of 'Your Profile' button in nav bar, indicating a user is logged in
     def check_if_logged_in(self):
-        return self.check_if_element_exists(HomePageLocators.YOUR_PROFILE_BUTTON)
+        return self.wait_until_element_exists(HomePageLocators.YOUR_PROFILE_BUTTON)
 
     # Function that clicks the 'Your Profile' button in top right corner of homepage
     def click_profile_button(self):
@@ -127,11 +142,11 @@ class RegisterPage(BasePage):
 
     # Function that checks for error message generated during registration caused by bad username
     def check_for_username_error(self):
-        return self.check_if_element_exists(RegisterPageLocators.ERROR_USERNAME_CONFLICT_MSG)
+        return self.wait_until_element_exists(RegisterPageLocators.ERROR_USERNAME_CONFLICT_MSG)
 
     # Function that checks for error message generated during registration caused by unmatched passwords
     def check_for_password_no_match_error(self):
-        return self.check_if_element_exists(RegisterPageLocators.ERROR_PASSWORDS_NO_MATCH_MSG)
+        return self.wait_until_element_exists(RegisterPageLocators.ERROR_PASSWORDS_NO_MATCH_MSG)
 
 
 class LoginPage(BasePage):
@@ -144,7 +159,7 @@ class LoginPage(BasePage):
 
     # Function that checks for login error message indicating bad login attempt
     def check_for_login_error(self):
-        return self.check_if_element_exists(LoginPageLocators.LOGIN_ERROR_MSG)
+        return self.wait_until_element_exists(LoginPageLocators.LOGIN_ERROR_MSG)
 
 
 class ProfilePage(BasePage):
@@ -171,11 +186,11 @@ class ProfilePage(BasePage):
 
     # Function that checks for success message indicating profile was successfully updated
     def check_for_update_profile_success(self):
-        return self.check_if_element_exists(ProfilePageLocators.UPDATE_SUCCESS_MSG)
+        return self.wait_until_element_exists(ProfilePageLocators.UPDATE_SUCCESS_MSG)
 
     # Function that checks for the error message indicating error updating username on profile page
     def check_for_update_profile_username_error(self):
-        return self.check_if_element_exists(ProfilePageLocators.USERNAME_UPDATE_ERROR_MSG)
+        return self.wait_until_element_exists(ProfilePageLocators.USERNAME_UPDATE_ERROR_MSG)
 
     # Function that updates user profile picture
     def update_picture(self):  # TODO
@@ -216,7 +231,7 @@ class IndividualPostPage(BasePage):
 
     # Function that checks for success of making post
     def check_for_post_success(self):
-        return self.check_if_element_exists(IndividualPostPageLocators.INDIVIDUAL_POST_UPDATE)
+        return self.wait_until_element_exists(IndividualPostPageLocators.INDIVIDUAL_POST_UPDATE)
 
     # Function that clicks the 'Delete Post' button
     def click_delete_post_button(self):
@@ -226,13 +241,20 @@ class IndividualPostPage(BasePage):
     def click_update_post_button(self):
         self.click_element(IndividualPostPageLocators.INDIVIDUAL_POST_UPDATE)
 
-    # Function that checks for presence of 'Delete Post' button (also indicates you created this post)
-    def check_for_delete_post_button(self):
-        return self.check_if_element_exists(IndividualPostPageLocators.INDIVIDUAL_POST_DELETE)
+    # Function that checks if the logged in user made this post (checks for 'Delete Post' and 'Update Post' buttons)
+    def check_if_user_made_post(self):
+        # Wait for 'main' tag to appear
+        self.wait_until_element_exists(IndividualPostPageLocators.MAIN_LOCATOR)
 
-    # Function that checks for presence of 'Update Post' button (also indicates you created this post)
-    def check_for_update_post_button(self):
-        return self.check_if_element_exists(IndividualPostPageLocators.INDIVIDUAL_POST_UPDATE)
+        postUpdateButtonStatus = self.check_if_element_exists(IndividualPostPageLocators.INDIVIDUAL_POST_UPDATE)
+        postDeleteButtonStatus = self.check_if_element_exists(IndividualPostPageLocators.INDIVIDUAL_POST_DELETE)
+
+        # Check if the 'Update Post' or 'Delete Post' buttons were not present
+        if (postDeleteButtonStatus == -1 or postUpdateButtonStatus == -1):
+            return -1
+
+        # Otherwise they both are present
+        return 0
 
 
 class ConfirmDeletePostPage(BasePage):

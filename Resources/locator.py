@@ -1,9 +1,10 @@
+# Third party imports
 from selenium.webdriver.common.by import By
 
 
 class HomePageLocators(object):
 
-    # All locators for homepage
+    # General locators
     LOGIN_BUTTON = (By.LINK_TEXT, "Login")
     REGISTER_BUTTON = (By.LINK_TEXT, "Register")
     YOUR_PROFILE_BUTTON = (By.LINK_TEXT, "Your Profile")
@@ -63,7 +64,10 @@ class CreatePostPageLocators(object):
 
 class IndividualPostPageLocators(object):
 
-    # Post update and delete button locators
+    # General locators
+    MAIN_LOCATOR = (By.CSS_SELECTOR, "main")
+
+    # Post update and delete button locators (only visible when post was made by logged in user)
     INDIVIDUAL_POST_UPDATE = (By.CSS_SELECTOR, ".btn-info")
     INDIVIDUAL_POST_DELETE = (By.CSS_SELECTOR, ".btn-danger")
 

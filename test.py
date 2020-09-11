@@ -1,14 +1,16 @@
+# Standard library imports
 import unittest
-from page import (HomePage, RegisterPage, LoginPage, ProfilePage,
-                  CreatePostPage, IndividualPostPage, ConfirmDeletePostPage)
 
-from testingData import (HomePageTestingData, RegisterPageTestingData, LoginPageTestingData,
-                         ProfilePageTestingData, CreatePostTestingData)
+# 3rd party imports
 from selenium import webdriver
 
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
+# Local file imports
+from Resources.page import (HomePage, RegisterPage, LoginPage, ProfilePage,
+                      CreatePostPage, IndividualPostPage, ConfirmDeletePostPage)
+
+from TestingData.testingData import (HomePageTestingData, RegisterPageTestingData,
+                                     LoginPageTestingData, ProfilePageTestingData, CreatePostTestingData)
+
 
 PATH = "/home/ryan/Desktop/chromedriver"
 
@@ -199,8 +201,7 @@ class UpdatePostTests(BaseTest):
         redirectHomePage.click_post_link_by_title(HomePageTestingData.TEST_USER_OWNED_POST_TITLE)
 
         individualPostPage = IndividualPostPage(redirectHomePage.driver)
-        assert individualPostPage.check_for_delete_post_button() == 0
-        assert individualPostPage.check_for_update_post_button() == 0
+        assert individualPostPage.check_if_user_made_post() == 0
 
     def test_cannot_access_other_user_posts(self):
         homePage = HomePage(self.driver)
@@ -212,7 +213,8 @@ class UpdatePostTests(BaseTest):
         redirectHomePage = HomePage(loginPage.driver)
         redirectHomePage.click_post_link_by_title(HomePageTestingData.TEST_USER_NOT_OWNED_POST_TITLE)
         individualPostPage = IndividualPostPage(redirectHomePage.driver)
-        assert individualPostPage.check_for_delete_post_button() == -1
+        assert individualPostPage.check_if_user_made_post() == -1
+
 
 if __name__ == "__main__":
     unittest.main()
