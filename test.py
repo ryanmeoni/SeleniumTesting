@@ -12,17 +12,20 @@ from TestingData.testingData import (HomePageTestingData, RegisterPageTestingDat
                                      LoginPageTestingData, ProfilePageTestingData, CreatePostTestingData)
 
 
-PATH = "/home/ryan/Desktop/chromedriver"
-
-
 # Base testing class for setUp() and tearDown() methods
 class BaseTest(unittest.TestCase):
     driver = None
 
     def setUp(self):
-        global PATH
-        self.driver = webdriver.Chrome(PATH)
-        self.driver.maximize_window()
+        # Below two lines for opening Chrome window during dev/testing
+        # self.driver = webdriver.Chrome()
+        # self.driver.maximize_window()
+
+        # Below lines needed for headless testing to enable continuous integration
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('headless')
+        chrome_options.add_argument('window-size=1920x1080')
+        self.driver = webdriver.Chrome(options=chrome_options)
 
     def tearDown(self):
         pass
