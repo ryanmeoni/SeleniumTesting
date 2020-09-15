@@ -12,7 +12,7 @@ class HomePageLocators(object):
     MAIN_LOCATOR = (By.CSS_SELECTOR, "main")
 
     # Test post locators
-    TEST_POST_LINK = (By.LINK_TEXT, "Hello!")
+    TEST_POST_LINK = (By.LINK_TEXT, "Hello")
 
 
 class RegisterPageLocators(object):
