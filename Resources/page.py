@@ -1,6 +1,5 @@
 # Standard library imports
-import sys
-sys.path.append("..")
+import os
 
 # Third party imports
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -103,6 +102,19 @@ class BasePage(object):
         except TimeoutException:
             print("Timeout in click_post_link_by_title")
 
+    # Function that inputs a picture into a picture file upload, does not submit picture or make changes
+    def choose_image_file_upload(self, locator, pictureName):
+        try:
+            self.wait_until_element_exists(locator)
+            # os.getcwd() returns the directory where the process was started, which is where test.py is located
+            self.driver.find_element(*locator).send_keys(os.getcwd() + pictureName)
+
+        except TimeoutException:
+            print("Timeout in choose_image_file_upload in page.py")
+
+        except NoSuchElementException:
+            print("No such element in choose_image_file_upload() in page.py")
+
 
 class HomePage(BasePage):
     # Constructor
@@ -180,7 +192,7 @@ class ProfilePage(BasePage):
     def get_email(self):
         return self.get_input_text(ProfilePageLocators.EMAIL_UPDATE_INPUT)
 
-    # Function that clicks the 'update profile' button
+    # Function that clicks the 'Update Profile' button
     def click_update_button(self):
         self.click_element(ProfilePageLocators.UPDATE_BUTTON)
 
@@ -192,17 +204,18 @@ class ProfilePage(BasePage):
     def check_for_update_profile_username_error(self):
         return self.wait_until_element_exists(ProfilePageLocators.USERNAME_UPDATE_ERROR_MSG)
 
-    # Function that updates user profile picture
-    def update_picture(self):  # TODO
-        pass
+    # Function that sets the picture to be updated to on a user's profile page, does not click 'Update Profile'
+    def choose_new_profile_picture(self, pictureName):  # TODO
+        self.choose_image_file_upload(ProfilePageLocators.PICTURE_UPDATE_INPUT, pictureName)
 
     # Function that checks for success of update profile picture
     def check_for_update_profile_picture_success(self): # TODO
-        pass
+        return self.wait_until_element_exists(ProfilePageLocators.UPDATE_SUCCESS_MSG)
 
     # Function that checks for error message indicating error updating user profile picture
     def check_for_update_profile_picture_error(self): # TODO
-        pass
+        return self.wait_until_element_exists(ProfilePageLocators.PICTURE_UPDATE_ERROR_MSG)
+
 
 class CreatePostPage(BasePage):
 
@@ -250,7 +263,7 @@ class IndividualPostPage(BasePage):
         postDeleteButtonStatus = self.check_if_element_exists(IndividualPostPageLocators.INDIVIDUAL_POST_DELETE)
 
         # Check if the 'Update Post' or 'Delete Post' buttons were not present
-        if (postDeleteButtonStatus == -1 or postUpdateButtonStatus == -1):
+        if postDeleteButtonStatus == -1 or postUpdateButtonStatus == -1:
             return -1
 
         # Otherwise they both are present

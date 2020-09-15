@@ -18,8 +18,8 @@ class BaseTest(unittest.TestCase):
 
     def setUp(self):
         # Below two lines for opening Chrome window during dev/testing
-        # self.driver = webdriver.Chrome()
-        # self.driver.maximize_window()
+        #self.driver = webdriver.Chrome()
+        #self.driver.maximize_window()
 
         # Below lines needed for headless testing to enable continuous integration
         chrome_options = webdriver.ChromeOptions()
@@ -162,6 +162,38 @@ class UserProfileTests(BaseTest):
 
         assert profilePage.check_for_update_profile_username_error() == 0
 
+    # Test that we can successfully update a user's profile picture
+    def test_update_profile_picture_success(self):
+        homePage = HomePage(self.driver)
+        homePage.click_login_button()
+
+        loginPage = LoginPage(homePage.driver)
+        loginPage.login(ProfilePageTestingData.ORIGINAL_TEST_USERNAME, ProfilePageTestingData.ORIGINAL_TEST_PASSWORD)
+
+        redirectHomePage = HomePage(loginPage.driver)
+        redirectHomePage.click_profile_button()
+
+        profilePage = ProfilePage(redirectHomePage.driver)
+        profilePage.choose_new_profile_picture(ProfilePageTestingData.VALID_PICTURE_PATH)
+        profilePage.click_update_button()
+        assert profilePage.check_for_update_profile_success() == 0
+
+    # Test that we can successfully update a user's profile picture
+    def test_update_profile_picture_error(self):
+        homePage = HomePage(self.driver)
+        homePage.click_login_button()
+
+        loginPage = LoginPage(homePage.driver)
+        loginPage.login(ProfilePageTestingData.ORIGINAL_TEST_USERNAME, ProfilePageTestingData.ORIGINAL_TEST_PASSWORD)
+
+        redirectHomePage = HomePage(loginPage.driver)
+        redirectHomePage.click_profile_button()
+
+        profilePage = ProfilePage(redirectHomePage.driver)
+        profilePage.choose_new_profile_picture(ProfilePageTestingData.INVALID_PICTURE_PATH)
+        profilePage.click_update_button()
+        assert profilePage.check_for_update_profile_picture_error() == 0
+
 
 class CreatePostTests(BaseTest):
 
@@ -189,6 +221,7 @@ class CreatePostTests(BaseTest):
 
         confirmDeletePostPage = ConfirmDeletePostPage(individualPostPage.driver)
         confirmDeletePostPage.click_confirm_delete_button()
+
 
 class UpdatePostTests(BaseTest):
 

@@ -38,6 +38,9 @@ class ProfilePageTestingData(object):
 
     ORIGINAL_TEST_PASSWORD = "thisisatest"
 
+    INVALID_PICTURE_PATH = "/Resources/invalidPicture.txt"
+    VALID_PICTURE_PATH = "/Resources/validPicture.png"
+
 class CreatePostTestingData(object):
 
     TEST_POST_TITLE = "This is the test post title"

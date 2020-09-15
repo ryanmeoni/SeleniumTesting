@@ -45,6 +45,7 @@ class ProfilePageLocators(object):
     # Profile update input locators
     USERNAME_UPDATE_INPUT = (By.ID, "id_username")
     EMAIL_UPDATE_INPUT = (By.ID, "id_email")
+    PICTURE_UPDATE_INPUT = (By.ID, "id_image")
     UPDATE_BUTTON = (By.CSS_SELECTOR, ".btn-outline-info")
 
     # Success message locators
@@ -52,6 +53,7 @@ class ProfilePageLocators(object):
 
     # Error message locators
     USERNAME_UPDATE_ERROR_MSG = (By.ID, "error_1_id_username")
+    PICTURE_UPDATE_ERROR_MSG = (By.ID, "error_1_id_image")
 
 
 class CreatePostPageLocators(object):
