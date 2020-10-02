@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 # Local file imports
 from Resources.locator import (RegisterPageLocators, LoginPageLocators,
                       HomePageLocators, ProfilePageLocators, CreatePostPageLocators,
-                      IndividualPostPageLocators, ConfirmDeletePostPageLocators)
+                      IndividualPostPageLocators, ConfirmDeletePostPageLocators, AboutPageLocators)
 
 from TestingData.testingData import HomePageTestingData
 
@@ -114,6 +114,9 @@ class BasePage(object):
 
         except NoSuchElementException:
             print("No such element in choose_image_file_upload() in page.py")
+
+    def click_about_page_button(self):
+        self.click_element(HomePageLocators.ABOUT_BUTTON)
 
 
 class HomePage(BasePage):
@@ -279,3 +282,10 @@ class ConfirmDeletePostPage(BasePage):
     # Function that clicks the 'Cancel Delete' button
     def click_cancel_delete_button(self):
         self.click_element(ConfirmDeletePostPageLocators.CANCEL_DELETE)
+
+
+class AboutPage(BasePage):
+
+    # Function that checks if the page successfully loads
+    def check_for_about_page_info(self):
+        return self.wait_until_element_exists(AboutPageLocators.ABOUT_PAGE_INFO_XPATH)

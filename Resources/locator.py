@@ -10,6 +10,7 @@ class HomePageLocators(object):
     YOUR_PROFILE_BUTTON = (By.LINK_TEXT, "Your Profile")
     CREATE_POST_BUTTON = (By.LINK_TEXT, "Create Post")
     MAIN_LOCATOR = (By.CSS_SELECTOR, "main")
+    ABOUT_BUTTON = (By.LINK_TEXT, "About")
 
     # Test post locators
     TEST_POST_LINK = (By.LINK_TEXT, "Hello")
@@ -79,3 +80,7 @@ class ConfirmDeletePostPageLocators(object):
     # Cancel deletion and confirm deletetion button locators
     CONFIRM_DELETE = (By.CSS_SELECTOR, ".btn-outline-danger")
     CANCEL_DELETE = (By.CSS_SELECTOR, "btn-outline-info")
+
+class AboutPageLocators(object):
+
+    ABOUT_PAGE_INFO_XPATH = (By.XPATH, "/html/body/header/main/div/div[1]/h1")

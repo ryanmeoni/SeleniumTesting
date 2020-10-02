@@ -6,7 +6,7 @@ from selenium import webdriver
 
 # Local file imports
 from Resources.page import (HomePage, RegisterPage, LoginPage, ProfilePage,
-                      CreatePostPage, IndividualPostPage, ConfirmDeletePostPage)
+                      CreatePostPage, IndividualPostPage, ConfirmDeletePostPage, AboutPage)
 
 from TestingData.testingData import (HomePageTestingData, RegisterPageTestingData,
                                      LoginPageTestingData, ProfilePageTestingData, CreatePostTestingData)
@@ -225,7 +225,7 @@ class CreatePostTests(BaseTest):
 
 class UpdatePostTests(BaseTest):
 
-    # Test that ensures a user cannot update a post they do not own
+    # Test that ensures a user can access (edit or delete) a post they own
     def test_can_access_own_posts(self):
         homePage = HomePage(self.driver)
         homePage.click_login_button()
@@ -239,6 +239,7 @@ class UpdatePostTests(BaseTest):
         individualPostPage = IndividualPostPage(redirectHomePage.driver)
         assert individualPostPage.check_if_user_made_post() == 0
 
+    # Test that ensures a user cannot update (edit or delete) a post they do not own
     def test_cannot_access_other_user_posts(self):
         homePage = HomePage(self.driver)
         homePage.click_login_button()
@@ -250,6 +251,21 @@ class UpdatePostTests(BaseTest):
         redirectHomePage.click_post_link_by_title(HomePageTestingData.TEST_USER_NOT_OWNED_POST_TITLE)
         individualPostPage = IndividualPostPage(redirectHomePage.driver)
         assert individualPostPage.check_if_user_made_post() == -1
+
+
+class AboutPageTests(BaseTest):
+
+    # Test that we can render the about page successfully
+    def test_can_render_about_page(self):
+        homePage = HomePage(self.driver)
+        homePage.click_login_button()
+
+        loginPage = LoginPage(homePage.driver)
+        loginPage.login(ProfilePageTestingData.ORIGINAL_TEST_USERNAME, ProfilePageTestingData.ORIGINAL_TEST_PASSWORD)
+
+        loginPage.click_about_page_button()
+        aboutPage = AboutPage(loginPage.driver)
+        assert aboutPage.check_for_about_page_info() == 0
 
 
 if __name__ == "__main__":
